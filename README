@@ -1,0 +1,64 @@
+# 🐾 API de Adoção de Animais
+
+API RESTful desenvolvida em **Node.js** com **TypeScript**, desenhada para servir como backend para uma aplicação iOS de adoção de animais.
+
+O projeto segue uma arquitetura por camadas (MVC) e utiliza o **MongoDB Atlas** para persistência de dados, suportando funcionalidades como filtragem de espécies e documentação automática via **Swagger/OpenAPI 3.1**.
+
+## 🚀 Tecnologias Utilizadas
+
+* **Runtime:** Node.js
+* **Linguagem:** TypeScript
+* **Framework:** Express.js
+* **Base de Dados:** MongoDB (Atlas)
+* **ODM:** Mongoose (com Schemas tipados)
+* **Documentação:** Swagger UI / OpenAPI 3.1
+* **Deploy:** Render.com
+
+## ✨ Funcionalidades Implementadas
+
+### 1. Gestão de Animais
+* **Listagem Geral:** Retorna todos os animais disponíveis para adoção.
+* **Filtragem:** Capacidade de filtrar animais por espécie via *query parameters* (ex: `?species=Coelho`).
+* **Detalhe:** Endpoint para consultar os detalhes completos de um animal específico pelo seu ID.
+* **Criação (Batch & Single):** O endpoint POST suporta a inserção de um único animal ou de uma lista (array) de animais em massa (útil para *seed* inicial da base de dados).
+
+### 2. Dados e Modelagem
+* **Estrutura Flexível:** Suporte para qualquer espécie de animal (Cães, Gatos, Pássaros, Répteis, etc.).
+* **Geolocalização:** Estrutura de dados preparada com **GeoJSON** para armazenar as coordenadas dos abrigos.
+* **Campos Ricos:** Inclui registo médico, personalidade, compatibilidade (crianças/outros animais) e estado da adoção.
+
+### 3. Documentação Profissional
+* Integração do **Swagger UI**.
+* Documentação interativa acessível em `/api-docs`.
+* Especificação seguindo o padrão **OpenAPI 3.1.0**.
+
+---
+
+## 📂 Estrutura do Projeto
+
+O projeto segue uma arquitetura modular para facilitar a escalabilidade e manutenção:
+
+```text
+src/
+├── config/         # Configurações (Base de dados, Swagger)
+├── controllers/    # Lógica de controlo (Request/Response)
+├── interfaces/     # Tipos e Interfaces TypeScript
+├── models/         # Schemas do Mongoose (Base de Dados)
+├── routes/         # Definição dos endpoints da API
+├── app.ts          # Configuração da Aplicação Express
+└── server.ts       # Entry point do servidor
+
+📡 Endpoints da API
+
+Método,Endpoint,Descrição
+GET,/api/animals,Lista todos os animais
+GET,/api/animals?species=Gato,Lista apenas gatos
+GET,/api/animals/{id},Detalhes de um animal
+POST,/api/animals,Cria novos animais (Body JSON)
+GET,/api-docs,Documentação Swagger
+
+Aceder:
+
+API: https://adoption-api-vb22.onrender.com/api/animals
+
+Docs: https://adoption-api-vb22.onrender.com/api-docs
