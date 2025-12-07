@@ -16,10 +16,13 @@ export const createAnimal = async (req: Request, res: Response) => {
 
 export const getAnimals = async (req: Request, res: Response) => {
     try {
-        // 1. Lemos os parâmetros da Query (ex: ?page=2&limit=10)
-        // Se não vier nada, assumimos página 1 e limite 10
+        // 1. Lemos a página e o limite da query (URL)
+        // Se a app não enviar nada, assumimos Página 1 e 10 animais
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
+
+        // Calculamos quantos animais temos de "saltar" (skip)
+        // Ex: Na página 2, saltamos os primeiros 10 ( (2-1) * 10 = 10 )
         const skip = (page - 1) * limit;
 
         const { species, status } = req.query;
@@ -27,13 +30,13 @@ export const getAnimals = async (req: Request, res: Response) => {
 
         if (species) filter.species = species;
         if (status) filter.status = status;
-        else filter.status = { $ne: 'Adotado' };
+        else filter.status = { $ne: 'Adotado' }; // Por defeito não mostra adotados
 
-        // 2. Aplicamos o .skip() e .limit() na query do Mongoose
+        // 2. Query otimizada com Paginação
         const animals = await Animal.find(filter)
-            .sort({ createdAt: -1 })
-            .skip(skip)   // Salta os anteriores
-            .limit(limit); // Traz só 10
+            .sort({ createdAt: -1 }) // Mais recentes primeiro
+            .skip(skip)              // Salta os anteriores
+            .limit(limit);           // Traz só 10
 
         res.status(200).json(animals);
     } catch (error) {
